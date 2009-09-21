@@ -1,7 +1,22 @@
-require 'test_helper'
+require File.join(File.dirname(__FILE__), 'test_helper')
+require 'multitest'
 
 class MultitestTest < Test::Unit::TestCase
-  should "probably rename this file and start testing for real" do
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+  context "a Multitest" do
+    setup do
+      @mt = Multitest.new([
+        File.expand_path(File.join(File.dirname(__FILE__), 'tests', 'sample_test.rb')),
+        File.expand_path(File.join(File.dirname(__FILE__), 'tests', 'another_test.rb'))
+      ])
+      FileUtils.rm_rf(File.expand_path(File.join(File.dirname(__FILE__), '..', 'tmp', 'test.log')))
+    end
+    
+    should "run three instances" do
+      @mt.run
+      assert File.exists?(File.expand_path(File.join(File.dirname(__FILE__), '..', 'tmp', 'test.log')))
+      File.open(File.expand_path(File.join(File.dirname(__FILE__), '..', 'tmp', 'test.log'))) do |f|
+        assert_equal %w(1 1 3).sort, f.read.split("\n").sort
+      end
+    end
   end
 end

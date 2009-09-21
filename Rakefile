@@ -5,13 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "multitest"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = "Run your tests in parallel"
+    gem.description = "Run your tests across multiple cores automatically."
     gem.email = "nick@smartlogicsolutions.com"
     gem.homepage = "http://github.com/ngauthier/multitest"
     gem.authors = ["Nick Gauthier"]
     gem.add_development_dependency "thoughtbot-shoulda"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.files.include(['lib/**/*.rb'])
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
