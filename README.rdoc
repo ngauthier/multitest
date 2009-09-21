@@ -1,6 +1,6 @@
 = multitest
 
-Description goes here.
+it's coming soon. it's not done yet. keep your eyes peeled.
 
 == Note on Patches/Pull Requests
  
