@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{multitest}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Gauthier"]
-  s.date = %q{2009-09-20}
+  s.date = %q{2009-09-24}
   s.description = %q{Run your tests across multiple cores automatically.}
   s.email = %q{nick@smartlogicsolutions.com}
   s.extra_rdoc_files = [
@@ -26,10 +26,16 @@ Gem::Specification.new do |s|
      "lib/multitest.rb",
      "lib/multitest.rb",
      "lib/multitest/multitest.rb",
+     "lib/multitest/multitest.rb",
+     "lib/multitest/pipe_dream.rb",
      "lib/multitest/pipe_dream.rb",
      "lib/multitest/tasks.rb",
+     "lib/multitest/tasks.rb",
+     "multitest.gemspec",
      "test/multitest_test.rb",
-     "test/test_helper.rb"
+     "test/test_helper.rb",
+     "test/tests/another_test.rb",
+     "test/tests/sample_test.rb"
   ]
   s.homepage = %q{http://github.com/ngauthier/multitest}
   s.rdoc_options = ["--charset=UTF-8"]
