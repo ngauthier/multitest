@@ -1,26 +1,35 @@
 require File.join(File.dirname(__FILE__), 'pipe_dream')
+require 'test/unit/testresult'
+require 'test/unit'
 
 # The ability to test multiple files across multiple cores
 # simultaneously
 class Multitest
+  @@cores = 2
+  def self.cores
+    @@cores
+  end
+  def self.cores=(c)
+    @@cores = c
+  end
   # Takes an options hash.
   #   :files => files to test
   #   :cores => number of cores to use
-  def initialize(files, cores = 2)
+  def initialize(files, cores = Multitest.cores)
     @files = files
     @cores = cores
     @children = []
     @threads = []
     @pipes = []
     
-    require 'test/unit'
     Test::Unit.run = true
     @files.each{|f| load f}
   end
 
   # Run the tests that have been setup
   def run
-    require 'test/unit/testresult'
+    return if @files.empty?
+    $stderr.write @files.inspect+"\n"; $stderr.flush
     @cores.times do |c|
       @pipes << PipeDream.new
       @children << Process.fork do
@@ -36,7 +45,12 @@ class Multitest
             start = Time.now
 
             @result = Test::Unit::TestResult.new
-            @result.add_listener(Test::Unit::TestResult::FAULT){|value| puts "got value: [#{value}]"}
+            @result.add_listener(Test::Unit::TestResult::FAULT) do |value|
+              # $stderr.write "\n"
+              $stderr.write value
+              $stderr.write "\n\n"
+              $stderr.flush
+            end
             klasses = Multitest.find_classes_in_file(file)
             klasses.each{|k| k.suite.run(@result){|status, name| ;}}
             
@@ -57,6 +71,9 @@ class Multitest
             pipe.write "[Worker #{c}] Failed: #{file} - #{ex.to_s}\n"
           end
         end
+        $stderr.write @result.to_s
+        $stderr.write "\n"
+        $stderr.flush
         pipe.close
       end
     end

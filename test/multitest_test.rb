@@ -8,6 +8,7 @@ class MultitestTest < Test::Unit::TestCase
         File.expand_path(File.join(File.dirname(__FILE__), 'tests', 'sample_test.rb')),
         File.expand_path(File.join(File.dirname(__FILE__), 'tests', 'another_test.rb'))
       ])
+      FileUtils.mkdir_p(File.join(File.dirname(__FILE__), '..', 'tmp'))
       FileUtils.rm_rf(File.expand_path(File.join(File.dirname(__FILE__), '..', 'tmp', 'test.log')))
     end
     
