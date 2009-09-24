@@ -8,37 +8,39 @@ Multitest is still very young, it is in active development and is no where near 
 
 == Installation
 
-gem install ngauthier-multitest
+  gem install ngauthier-multitest
 
 == Usage
 
 in your Rakefile:
 
-require 'multitest'
-require 'multitest/tasks'
+  require 'multitest'
+  require 'multitest/tasks'
 
 on the commandline:
 
-rake multitest
-rake multitest:units multitest:functionals multitest:integration
+  rake multitest
+  rake multitest:units multitest:functionals multitest:integration
 
 == Configuration
 
 in your Rakefile:
 
-Multitest.cores = 8
+  Multitest.cores = 8
 
 == Examples
 
 On a small app that I have:
 
-Normal suite
-time rake test
-16.38user 2.99system 0:20.38elapsed 95%CPU 
+=== Normal suite
 
-2 Cores:
-time rake multitest
-8.35user 1.64system 0:08.51elapsed 117%CPU
+  time rake test
+  16.38user 2.99system 0:20.38elapsed 95%CPU 
+
+=== 2 Cores
+
+  time rake multitest
+  8.35user 1.64system 0:08.51elapsed 117%CPU
 
 Note the wall-time differences of 20.38 vs 8.51. 239% speedup on two cores.
 
