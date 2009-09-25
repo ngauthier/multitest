@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Gauthier"]
-  s.date = %q{2009-09-24}
+  s.date = %q{2009-09-25}
   s.description = %q{Run your tests across multiple cores automatically.}
   s.email = %q{nick@smartlogicsolutions.com}
   s.extra_rdoc_files = [
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
      "lib/multitest/multitest.rb",
      "lib/multitest/pipe_dream.rb",
      "lib/multitest/pipe_dream.rb",
+     "lib/multitest/safe_fork.rb",
      "lib/multitest/tasks.rb",
      "lib/multitest/tasks.rb",
      "multitest.gemspec",

@@ -2,9 +2,11 @@
 
 == Caveats
 
-Multitest currently is not really tested and working with databases all that well. I have a project in Postgres with all of my data done transactionally during the test via factory_girl. It works there. But it didn't work on a quick test in a MySQL project.
-
 Multitest is still very young, it is in active development and is no where near complete or robust.
+
+Multitest currently only works in a rails environment. It's only because I use "constantize".
+
+If you depend on fixture data in your database, you may have data inconsistency errors. I like to use an empty DB and then use factories with transactional tests, and this runs great.
 
 == Installation
 
@@ -28,21 +30,48 @@ in your Rakefile:
 
   Multitest.cores = 8
 
-== Examples
+== Benchmarks
 
-On a small app that I have:
+This is one of our largest apps.
 
 === Normal suite
 
   time rake test
-  16.38user 2.99system 0:20.38elapsed 95%CPU 
+  259.03user 27.50system 5:14.76elapsed 91%CPU
 
 === 2 Cores
 
   time rake multitest
-  8.35user 1.64system 0:08.51elapsed 117%CPU
+  213.86user 23.38system 2:41.24elapsed 147%CPU
 
-Note the wall-time differences of 20.38 vs 8.51. 239% speedup on two cores.
+=== 4 Cores
+
+  time rake multitest
+  223.18user 24.53system 2:08.96elapsed 192%CPU
+
+Note the wall-time differences of 5:14 vs 2:41. 195% speedup on two cores. On 4 cores there is only a speedup of 243%, but that's still quicker. If you send me impressive benchmarks, I'll be happy to put them up here (8 cores anyone?).
+
+== Require Errors
+
+If you get require errors like:
+
+  Running multitest:units
+  rake aborted!
+  no such file to load -- test_helper
+
+Then you may want to use more absolute paths in your tests. For example, if you had:
+
+  # test/unit/my_class.rb
+  require 'test_helper'
+  class MyClass < ActiveSupport::TestCase
+  end
+
+You should change it to:
+
+  # test/unit/my_class.rb
+  require File.join(File.dirname(__FILE__), '..', 'test_helper')
+  class MyClass < ActiveSupport::TestCase
+  end
 
 == Note on Patches/Pull Requests
  
@@ -52,7 +81,7 @@ Note the wall-time differences of 20.38 vs 8.51. 239% speedup on two cores.
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
+  bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright

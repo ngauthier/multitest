@@ -4,7 +4,7 @@ module Multitest::Tasks
   
   namespace :multitest do
     desc "Multi-core test:units"
-    task :units do
+    task :units => [:environment] do
       pattern = 'test/unit/**/*_test.rb'
       files = Dir.glob(pattern)
       $stderr.write "Running multitest:units\n"
@@ -12,7 +12,7 @@ module Multitest::Tasks
       $stderr.write "Completed multitest:units\n\n"
     end
     desc "Multi-core test:functionals"
-    task :functionals do
+    task :functionals => [:environment] do
       pattern = 'test/functional/**/*_test.rb'
       files = Dir.glob(pattern)
       $stderr.write "Running multitest:functionals\n"
@@ -20,7 +20,7 @@ module Multitest::Tasks
       $stderr.write "Completed multitest:functionals\n\n"
     end
     desc "Multi-core test:integration"
-    task :integration do
+    task :integration => [:environment] do
       pattern = 'test/integration/**/*_test.rb'
       files = Dir.glob(pattern)
       $stderr.write "Running multitest:integration\n"

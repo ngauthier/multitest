@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'pipe_dream')
+require File.join(File.dirname(__FILE__), 'safe_fork')
 require 'test/unit/testresult'
 require 'test/unit'
 
@@ -32,38 +33,26 @@ class Multitest
     $stderr.write @files.inspect+"\n"; $stderr.flush
     @cores.times do |c|
       @pipes << PipeDream.new
-      @children << Process.fork do
+      @children << SafeFork.fork do
         Signal.trap("TERM") { exit }
         Signal.trap("HUP") { exit }
         pipe = @pipes.last
         pipe.identify_as_child
         pipe.write("[Worker #{c}] Booted\n")
+        @result = Test::Unit::TestResult.new
+        @result.add_listener(Test::Unit::TestResult::FAULT) do |value|
+          $stderr.write value
+          $stderr.write "\n\n"
+          $stderr.flush
+        end
         while !pipe.eof?
           file = pipe.gets.chomp
           begin
             pipe.write "[Worker #{c} Starting: #{file}\n"
             start = Time.now
 
-            @result = Test::Unit::TestResult.new
-            @result.add_listener(Test::Unit::TestResult::FAULT) do |value|
-              # $stderr.write "\n"
-              $stderr.write value
-              $stderr.write "\n\n"
-              $stderr.flush
-            end
             klasses = Multitest.find_classes_in_file(file)
             klasses.each{|k| k.suite.run(@result){|status, name| ;}}
-            
-            #puts @result
-            
-            #unless @result[:failures].empty?
-            #  puts @result[:failures].inspect
-            #end
-            
-            #unless @result.errors.empty?
-            #  puts @result.errors.inspect
-            #end
-            
             
             finish = Time.now
             pipe.write "[Worker #{c}] Completed: #{file} (#{finish-start})\n"
@@ -119,8 +108,22 @@ class Multitest
   def self.find_classes_in_file(f)
     code = ""
     File.open(f) {|buffer| code = buffer.read}
-    matches = code.scan /class\s+([\S]+)/
-    klasses = matches.collect{|c| eval(c.first) }
+    matches = code.scan(/class\s+([\S]+)/)
+    klasses = matches.collect do |c|
+      begin
+        if c.first.respond_to? :constantize
+          c.first.constantize
+        else
+          eval(c.first)
+        end
+      rescue NameError
+        # $stderr.write "Could not load [#{c.first}] from [#{f}]\n"
+        nil
+      rescue SyntaxError
+        # $stderr.write "Could not load [#{c.first}] from [#{f}]\n"
+        nil
+      end
+    end
     return klasses.select{|k| k.respond_to? 'suite'}
   end
 
