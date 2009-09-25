@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{multitest}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Gauthier"]
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
      "lib/multitest/multitest.rb",
      "lib/multitest/pipe_dream.rb",
      "lib/multitest/pipe_dream.rb",
+     "lib/multitest/safe_fork.rb",
      "lib/multitest/safe_fork.rb",
      "lib/multitest/tasks.rb",
      "lib/multitest/tasks.rb",
