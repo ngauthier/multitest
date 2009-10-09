@@ -10,7 +10,9 @@ If you depend on fixture data in your database, you may have data inconsistency 
 
 == Installation
 
-  gem install ngauthier-multitest
+You will need to have Gemcutter[http://gemcutter.org/] in your list of gem sources.
+
+  gem install multitest
 
 == Usage
 
