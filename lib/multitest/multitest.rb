@@ -17,7 +17,9 @@ class Multitest
   #   :files => files to test
   #   :cores => number of cores to use
   def initialize(files, cores = Multitest.cores)
-    @files = files
+    @files = files.sort do |a,b|
+      File.size(b) <=> File.size(a)
+    end
     @cores = cores
     @children = []
     @threads = []

@@ -1,8 +1,19 @@
 module Multitest::Tasks
   desc "Test all your code in parallel"
-  task :multitest => ['multitest:units', 'multitest:functionals', 'multitest:integration']
+  task :multitest => ['multitest:all'] 
   
   namespace :multitest do
+    desc "Test all your code in parallel"
+    task :all => [:environment] do
+      files = []
+      files += Dir.glob('test/unit/**/*_test.rb')
+      files += Dir.glob('test/functional/**/*_test.rb')
+      files += Dir.glob('test/integration/**/*_test.rb')
+      $stderr.write "Running multitest:all\n"
+      Multitest.new(files).run
+      $stderr.write "Completed multitest:all\n\n"
+    end
+
     desc "Multi-core test:units"
     task :units => [:environment] do
       pattern = 'test/unit/**/*_test.rb'
