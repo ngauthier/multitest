@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{multitest}
-  s.version = "0.1.1"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Gauthier"]
-  s.date = %q{2010-01-18}
+  s.date = %q{2010-01-25}
   s.description = %q{Run your tests across multiple cores automatically.}
   s.email = %q{nick@smartlogicsolutions.com}
   s.extra_rdoc_files = [
